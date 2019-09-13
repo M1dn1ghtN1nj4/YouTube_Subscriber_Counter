@@ -9,13 +9,18 @@ const char* password = "PASSWORD-HERE";  // Password on network
 String API_KEY = "API-KEY-HERE";         // YouTube Data API v3 key generated here: https://console.developers.google.com
 String CHANNEL_ID = "CHANNEL-ID-HERE";   // YouTube channel id
 
-LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Set the LCD I2C address 
+LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Set the LCD I2C address
 
 WiFiClientSecure client;
 YoutubeApi api(API_KEY, client);
 
-unsigned long api_mtbs = 3000; //mean time between api requests
-unsigned long api_lasttime;    //last time api request has been done
+// Time between API requests
+// Make sure this is OVER about 9 seconds (9000) otherwise
+// you will exceed your 10000 request quota.  You can hit your
+// 10000 requests if you set it to 8.64 seconds.  So to stay
+// in the clear, keep this around 20000 to 30000 (20s to 30s).
+unsigned long api_mtbs = 30000;
+unsigned long api_lasttime;    //last time api request was made
 long subs = 0;
 
 void setup() {
